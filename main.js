@@ -5,9 +5,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require('mongoose');
-const passport = require('passport');
-
 const appconfig = require('./config/appconfig');
+const passport = require('passport');
+const passportConfig = require('./config/passport');
+
+
 
 mongoose.connect(appconfig.database.host, { useNewUrlParser: true });
 mongoose.connection.on('connected', () => {
@@ -20,6 +22,10 @@ const users = require('./routes/users');
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+passportConfig(passport);
+
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,'front-end')));

@@ -8,6 +8,10 @@ module.exports = {
     },
     application : {
         title : 'Sandbox Project'
+    },
+    security:{
+        secret: 'secrettoken',
+        tokenexpiration: 86400
     }
 
 }

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const config = require('../config/appconfig');
 
 const UserSchema = mongoose.Schema({
     name:{
@@ -22,16 +21,29 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.getUserById = function(id, callback){
+module.exports.getUserById = (id, callback) => {
+    console.log("Get User by ID");
     User.findById(id, callback);
 }
 
-module.exports.getUserByUserName = function (username, callback ){
+module.exports.getUserByUserName = (username, callback ) => { 
     const query = { username : username};
     User.findOne(query, callback);
 }
 
-module.exports.addUser = function(newUser, callback){
+module.exports.getUserByEmail =  (email, callback ) => {
+    const query = { email : email};
+    User.findOne(query, callback);
+}
+
+module.exports.comparePassword = (formPassword, hashedPassword, callback ) => {
+    bcrypt.compare(formPassword, hashedPassword, (err, matched) => {
+        if(err) throw err;
+        callback(null, matched);
+    });
+}
+
+module.exports.addUser = (newUser, callback) => {
     const plainTextPassword = newUser.password;
     
     bcrypt.genSalt(10, (err, salt) => {
